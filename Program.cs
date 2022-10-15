@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using DotCarDumper.FileProcessing;
 
@@ -13,10 +10,12 @@ namespace DotCarDumper
 {
     static class Program
     {
-        [STAThreadAttribute]
+        [STAThread]
         static void Main(string[] args)
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US"); // Forces floating point numbers to use periods
+
+            #region File Access
 
             string filePath = string.Empty;
             string fileName = string.Empty;
@@ -24,7 +23,7 @@ namespace DotCarDumper
                 filePath = args[0];
             else
             {
-                OpenFileDialog dialog = new OpenFileDialog
+                OpenFileDialog dialog = new OpenFileDialog // Ask for a file if it hasn't been provided as an argument
                 {
                     Filter = "Car export files (*.car)|*.car|All files (*.*)|*.*",
                     InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
@@ -41,10 +40,12 @@ namespace DotCarDumper
                     }
                 }
             }
+            #endregion
 
-        #if !DEBUG
+            #region Data Handling
+#if !DEBUG
             try
-        #endif
+#endif
             {
                 DotCarFileReader fr = new DotCarFileReader(filePath);
 
@@ -54,12 +55,13 @@ namespace DotCarDumper
                 //File.WriteAllText("Output.txt", fr.GetTableString());
                 File.WriteAllText(fileName, fr.BuildString());
             }
-        #if !DEBUG
+#if !DEBUG
             catch (Exception x)
             {
                 MessageBox.Show(x.Message, "Could not deserialize file", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        #endif
+#endif
+            #endregion
         }
     }
 }

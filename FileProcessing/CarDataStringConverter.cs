@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DotCarDumper.FileProcessing
 {
     static class CarDataStringConverter
     {
+        #region Public Interface
         public static void ConvertStringTables(CarStructureTable table)
         {
             object[] vals = table.Values();
             object[] keys = table.Keys();
-            for (UInt32 i = 0; i < table.Count; i++)
+            for (Int32 i = 0; i < table.Count; i++)
             {
                 if (vals[i] is byte[] buffer)
                 {
@@ -40,5 +37,6 @@ namespace DotCarDumper.FileProcessing
                 }
             }
         }
+        #endregion
     }
 }

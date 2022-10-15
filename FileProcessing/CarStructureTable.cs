@@ -1,29 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DotCarDumper.FileProcessing
 {
     class CarStructureTable
     {
+        #region Public Fields
+
         public readonly CarStructureTable Parent = null;
+        public readonly Int32 Size = 0; // Expected size of the table
+        public Int32 Count { get; private set; } = 0; // Actual amount of pairs in the table
+        #endregion
+
+        #region Member Fields
 
         readonly List<object> _keys;
         readonly List<object> _values;
+        #endregion
 
-        public readonly UInt32 Size = 0; // Expected size of the table
-        public UInt32 Count { get; private set; } = 0; // Actual amount of pairs in the table
-
-        public CarStructureTable(UInt32 size, CarStructureTable parent = null)
+        #region Initialization
+        public CarStructureTable(Int32 size, CarStructureTable parent = null)
         {
             Size = size;
             Parent = parent;
-            _keys = new List<object>((int)size);
-            _values = new List<object>((int)size);
+            _keys = new List<object>(size);
+            _values = new List<object>(size);
         }
+        #endregion
 
+        #region Public Interface
         public void Add(object key, object value)
         {
             _keys.Add(key);
@@ -34,18 +39,19 @@ namespace DotCarDumper.FileProcessing
         public object[] Keys() { return _keys.ToArray(); }
         public object[] Values() { return _values.ToArray(); }
 
-        public KeyValuePair<object, object> GetPair(UInt32 id)
+        public KeyValuePair<object, object> GetPair(Int32 id)
         {
-            return new KeyValuePair<object, object>(_keys[(Int32)id], _values[(Int32)id]);
+            return new KeyValuePair<object, object>(_keys[id], _values[id]);
         }
 
-        public void SetValue(UInt32 id, object value)
+        public void SetValue(Int32 id, object value)
         {
-            _values[(Int32)id] = value;
+            _values[id] = value;
         }
-        public void SetKey(UInt32 id, object value)
+        public void SetKey(Int32 id, object value)
         {
-            _keys[(Int32)id] = value;
+            _keys[id] = value;
         }
+        #endregion
     }
 }

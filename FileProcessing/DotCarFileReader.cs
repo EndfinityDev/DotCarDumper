@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DotCarDumper.FileProcessing
 {
     class DotCarFileReader
     {
+        #region Public Fields
         public CarStructureTable MainTable { get; private set; } // Toplevel table
+        #endregion
+
+        #region Member Fields
+
         readonly BinaryReader _binaryReader;
 
         CarStructureTable _currentTable = null;
         CarStructureTable _nextTable = null; // Used for subtables
-        
+        #endregion
 
+        #region Initialization
         public DotCarFileReader(string filePath)
         {
             FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
@@ -35,22 +39,26 @@ namespace DotCarDumper.FileProcessing
 
             _binaryReader.Close();
         }
+        #endregion
 
-
-        
+        #region Public Interface
         public string BuildString()
         {
             return GetTableString(MainTable);
         }
+        #endregion
 
-        string GetTableString(CarStructureTable table, byte indentationLevel = 0)
+        #region Member Interface
+
+        #region Conversion To String
+        string GetTableString(CarStructureTable table, UInt32 indentationLevel = 0)
         {
             StringBuilder sb = new StringBuilder();
             KeyValuePair<object, object> kv;
 
-            for(UInt32 i = 0; i < table.Count; i++)
+            for(Int32 i = 0; i < table.Count; i++)
             {
-                for(byte o = 0; o < indentationLevel; o++)
+                for(UInt32 o = 0; o < indentationLevel; o++)
                 {
                     sb.Append("\t");
                 }
@@ -59,7 +67,7 @@ namespace DotCarDumper.FileProcessing
                 if (kv.Key is CarStructureTable keyTable)
                 {
                     sb.AppendLine();
-                    byte newIndentationLevel = (byte)(indentationLevel + 0b1);
+                    UInt32 newIndentationLevel = indentationLevel + 1;
                     sb.Append(GetTableString(keyTable, newIndentationLevel));
                 }
                 else
@@ -69,7 +77,7 @@ namespace DotCarDumper.FileProcessing
                 if (kv.Value is CarStructureTable valueTable)
                 {
                     sb.AppendLine();
-                    byte newIndentationLevel = (byte)(indentationLevel + 0b1);
+                    UInt32 newIndentationLevel = indentationLevel + 1;
                     sb.Append(GetTableString(valueTable, newIndentationLevel));
                 }
                 else
@@ -79,7 +87,9 @@ namespace DotCarDumper.FileProcessing
             }
                 return sb.ToString();
         }
+        #endregion
 
+        #region Data Handling
         void ReadStream()
         {
             if (_binaryReader.ReadByte() != 0x01)
@@ -144,8 +154,8 @@ namespace DotCarDumper.FileProcessing
 
         object ReadString()
         {
-            UInt32 stringSize = _binaryReader.ReadUInt32();
-            byte[] byteString = _binaryReader.ReadBytes((Int32)stringSize);
+            Int32 stringSize = _binaryReader.ReadInt32();
+            byte[] byteString = _binaryReader.ReadBytes(stringSize);
             if (byteString.Length == 0)
                 return string.Empty;
             if (byteString[0] == 0x01) // Marks a subtable
@@ -160,12 +170,12 @@ namespace DotCarDumper.FileProcessing
 
         CarStructureTable ReadTable()
         {
-            UInt32 tableSize;
+            Int32 tableSize;
 
-            tableSize = _binaryReader.ReadUInt32();
+            tableSize = _binaryReader.ReadInt32();
 
             if (tableSize == 0)
-                tableSize = _binaryReader.ReadUInt32();
+                tableSize = _binaryReader.ReadInt32();
             else
                 _ = _binaryReader.ReadUInt32(); // Jump over the second integer if the value was found in the first one
                                                 // as only one of the two contains a value
@@ -173,5 +183,7 @@ namespace DotCarDumper.FileProcessing
 
             return table;
         }
+        #endregion
+        #endregion
     }
 }
