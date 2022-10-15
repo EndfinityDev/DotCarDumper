@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotCarReader.FileProcessing
+namespace DotCarDumper.FileProcessing
 {
     class DotCarFileReader
     {

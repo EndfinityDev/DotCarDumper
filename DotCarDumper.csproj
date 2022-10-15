@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C62A6313-49E2-492E-873F-3CADE5326901}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>DotCarReader</RootNamespace>
-    <AssemblyName>DotCarReader</AssemblyName>
+    <RootNamespace>DotCarDumper</RootNamespace>
+    <AssemblyName>DotCarDumper</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

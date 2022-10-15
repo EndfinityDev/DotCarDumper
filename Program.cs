@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DotCarReader.FileProcessing;
+using DotCarDumper.FileProcessing;
 
-namespace DotCarReader
+namespace DotCarDumper
 {
     static class Program
     {
