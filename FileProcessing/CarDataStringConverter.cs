@@ -18,12 +18,12 @@ namespace DotCarDumper.FileProcessing
                     var stream = new MemoryStream(buffer);
                     DotCarFileReader fr = new DotCarFileReader(stream);
                     table.SetValue(i, fr.MainTable);
-                    continue;
                 }
-                if (vals[i] is CarStructureTable subTable)
+                else if (vals[i] is CarStructureTable subTable)
                 {
                     ConvertStringTables(subTable);
                 }
+				
                 if (keys[i] is byte[] buffer2)
                 {
                     var stream = new MemoryStream(buffer2);
@@ -31,7 +31,7 @@ namespace DotCarDumper.FileProcessing
                     table.SetKey(i, fr.MainTable);
                     continue;
                 }
-                if (keys[i] is CarStructureTable subTable2)
+                else if (keys[i] is CarStructureTable subTable2)
                 {
                     ConvertStringTables(subTable2);
                 }
