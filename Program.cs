@@ -39,6 +39,8 @@ namespace DotCarDumper
                         Environment.Exit(0);
                     }
                 }
+                else
+                    Environment.Exit(0);
             }
             #endregion
 
